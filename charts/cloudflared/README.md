@@ -8,7 +8,7 @@ You can use [`cloudflare_argo_tunnel` Terraform resource](https://registry.terra
 Example values:
 
 ```yaml
-replicaCount: 3
+replicaCount: 2`
 
 tunnel: example-tunnel
 ingress:
