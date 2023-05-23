@@ -1,0 +1,102 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: adguard-home
+  labels:
+    {{- include "adguard-home.labels" . | nindent 4 }}
+spec:
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      {{- include "adguard-home.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "adguard-home.selectorLabels" . | nindent 8 }}
+    spec:
+      initContainers:
+        - command:
+          - sh
+          - -c
+          - |
+            if [ ! -f /opt/adguardhome/conf/AdGuardHome.yaml ]; then
+              mkdir -p /opt/adguardhome/conf
+              cp /tmp/AdGuardHome.yaml /opt/adguardhome/conf/AdGuardHome.yaml
+            fi
+          image: busybox
+          imagePullPolicy: IfNotPresent
+          name: copy-configmap
+          securityContext:
+            runAsUser: 0
+          volumeMounts:
+          - mountPath: /tmp/AdGuardHome.yaml
+            name: adguard-home-config
+            subPath: AdGuardHome.yaml
+          - mountPath: /opt/adguardhome/conf
+            name: config
+      containers:
+        - name: adguard-home
+          image: "adguard/adguardhome:{{ .Chart.AppVersion }}"
+          imagePullPolicy: IfNotPresent
+          # command: ["sleep"]
+          # args: ["infinity"]
+          command: ["/opt/adguardhome/AdGuardHome"]
+          args:
+            - --config
+            - /opt/adguardhome/conf/AdGuardHome.yaml
+            - --work-dir
+            - /opt/adguardhome/work
+            - --no-check-update
+          env:
+            - name: TZ
+              value: EEST
+          ports:
+            - name: dns-tcp
+              containerPort: 53
+              protocol: TCP
+            - name: dns-udp
+              containerPort: 53
+              protocol: UDP
+            - name: http
+              containerPort: 3000
+              protocol: TCP
+          volumeMounts:
+            - name: adguard-home-config
+              mountPath: /tmp/AdGuardHome.yaml
+              subPath: AdGuardHome.yaml
+            - name: config
+              mountPath: /opt/adguardhome/conf
+            - name: data
+              mountPath: /opt/adguardhome/work
+          livenessProbe:
+            tcpSocket:
+              port: 3000
+            initialDelaySeconds: 0
+            failureThreshold: 3
+            timeoutSeconds: 1
+            periodSeconds: 10
+          readinessProbe:
+            tcpSocket:
+              port: 3000
+            initialDelaySeconds: 0
+            failureThreshold: 3
+            timeoutSeconds: 1
+            periodSeconds: 10
+          startupProbe:
+            tcpSocket:
+              port: 3000
+            initialDelaySeconds: 0
+            failureThreshold: 30
+            timeoutSeconds: 1
+            periodSeconds: 5
+      volumes:
+        - name: adguard-home-config
+          configMap:
+            name: adguard-home-config
+        - name: config
+          persistentVolumeClaim:
+            claimName: adguard-home-config
+        - name: data
+          persistentVolumeClaim:
+            claimName: adguard-home-data
