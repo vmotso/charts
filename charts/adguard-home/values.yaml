@@ -134,6 +134,9 @@ config: |
   log_max_age: 3
   log_file: ""
   verbose: false
+  statistics:
+    enabled: true
+    interval: 30d
   os:
     group: ""
     user: ""
@@ -146,3 +149,5 @@ persistence:
 ingress:
   annotations: {}
   host: ""
+
+nodeSelector: ""

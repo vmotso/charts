@@ -7,7 +7,7 @@ metadata:
     {{- include "adguard-home.labels" . | nindent 4 }}
 spec:
   type: NodePort
-  # externalTrafficPolicy: Local
+  externalTrafficPolicy: Local
   ports:
   - port: 53
     targetPort: 53
@@ -24,10 +24,11 @@ metadata:
     {{- include "adguard-home.labels" . | nindent 4 }}
 spec:
   type: NodePort
-  # externalTrafficPolicy: Local
+  externalTrafficPolicy: Local
   ports:
   - port: 53
     targetPort: 53
+    nodePort: 30053
     protocol: UDP
     name: dns-udp
   selector:
