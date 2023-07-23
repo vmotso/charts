@@ -150,4 +150,4 @@ ingress:
   annotations: {}
   host: ""
 
-nodeSelector: {}
+node: ""
