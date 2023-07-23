@@ -15,8 +15,7 @@ spec:
       labels:
         {{- include "adguard-home.selectorLabels" . | nindent 8 }}
     spec:
-      nodeSelector:
-        kubernetes.io/hostname: {{ .Values.node }}
+      nodeSelector: {{ .Values.nodeSelector }}
       initContainers:
         - command:
           - sh

@@ -150,4 +150,5 @@ ingress:
   annotations: {}
   host: ""
 
-node: ""
+nodeSelector:
+  kubernetes.io/hostname: homelab-node0
