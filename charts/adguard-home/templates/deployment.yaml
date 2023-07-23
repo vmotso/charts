@@ -15,10 +15,8 @@ spec:
       labels:
         {{- include "adguard-home.selectorLabels" . | nindent 8 }}
     spec:
-      {{- if .Values.nodeSelector }}
       nodeSelector:
         {{ toYaml .Values.nodeSelector }}
-      {{- end }}
       initContainers:
         - command:
           - sh
