@@ -3,6 +3,16 @@ entries:
   adguard-home:
   - apiVersion: v2
     appVersion: v0.107.34
+    created: "2023-07-23T13:53:28.909213246Z"
+    description: Simple AdGuardHome deployment
+    digest: e0261eb82e0ace87d6b95b06946d80997a27ebf0b13b4ea24f30f027125fc657
+    name: adguard-home
+    type: application
+    urls:
+    - https://github.com/vmotso/helm-charts/releases/download/adguard-home-1.9.0/adguard-home-1.9.0.tgz
+    version: 1.9.0
+  - apiVersion: v2
+    appVersion: v0.107.34
     created: "2023-07-23T13:41:46.116348218Z"
     description: Simple AdGuardHome deployment
     digest: 388a4e7c67b3438701182ebeeaee5ddda5cfc5994a08a81511ed002225dd5cfd
@@ -112,4 +122,4 @@ entries:
     urls:
     - https://github.com/vmotso/helm-charts/releases/download/cloudflared-1.0.0/cloudflared-1.0.0.tgz
     version: 1.0.0
-generated: "2023-07-23T13:41:46.11638232Z"
+generated: "2023-07-23T13:53:28.909253546Z"
